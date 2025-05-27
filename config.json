@@ -1,0 +1,7 @@
+{
+    "name_server":"NARVAAEEEZZZZ\\SQLEXPRESS",
+    "database":"Quito_Catequesis_DB_2025",
+    "username": "AdministradorParroquial",
+    "password": "EsJustoYNecesario",
+    "controlador_odbc": "SQL Server" 
+}

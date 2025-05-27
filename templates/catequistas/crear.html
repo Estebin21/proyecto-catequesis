@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h2>Registrar Catequista</h2>
+<form method="POST">
+    <label>Cédula:</label><input type="text" name="cedula"><br>
+    <label>Nombre:</label><input type="text" name="nombre"><br>
+    <label>Apellido:</label><input type="text" name="apellido"><br>
+    <label>Fecha de nacimiento:</label><input type="date" name="fecha_nacimiento"><br>
+    <label>Tipo:</label><input type="text" name="tipo"><br>
+    <label>Correo:</label><input type="email" name="correo"><br>
+    <label>ID Parroquia:</label><input type="number" name="parroquia_id"><br>
+    <button type="submit">Guardar</button>
+</form>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1>Lista de Catequizandos</h1>
+<table border="1">
+    <tr>
+        <th>ID</th><th>Nombre</th><th>Apellido</th><th>Fecha Nacimiento</th><th>Cédula</th>
+    </tr>
+    {% for c in catequizandos %}
+    <tr>
+        <td>{{ c.Id_catequizando }}</td>
+        <td>{{ c.Nombre }}</td>
+        <td>{{ c.Apellido }}</td>
+        <td>{{ c.Fecha_nacimiento }}</td>
+        <td>{{ c.Cedula }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

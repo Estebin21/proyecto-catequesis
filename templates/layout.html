@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gestión Catequistas</title>
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('index') }}">Inicio</a> |
+        <a href="{{ url_for('buscar_catequistas') }}">Ver Catequistas</a> |
+        <a href="{{ url_for('crear_catequista') }}">Registrar Catequista</a> |
+        <a href="{{ url_for('BuscarCatequizando') }}">Ver Catequizandos</a>
+    </nav>
+    <hr>
+    {% block content %}{% endblock %}
+</body>
+</html>
