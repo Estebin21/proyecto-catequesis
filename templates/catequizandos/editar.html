@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h2>Editar Catequizando</h2>
+
+<!-- Siempre mostrar formulario para buscar por ID -->
+<form method="POST">
+    <input type="number" name="filtro_id" placeholder="Ingrese ID del catequizando" required>
+    <button type="submit">Buscar</button>
+</form>
+<hr>
+
+<!-- Mostrar el formulario solo si se encontró -->
+{% if catequizando %}
+<form method="POST">
+    <input type="hidden" name="id" value="{{ catequizando[0] }}">
+    <label>Nombre:</label><input type="text" name="nombre" value="{{ catequizando[1] }}"><br>
+    <label>Apellido:</label><input type="text" name="apellido" value="{{ catequizando[2] }}"><br>
+    <button type="submit">Actualizar</button>
+</form>
+{% elif request.method == 'POST' %}
+<p>No se encontró un catequizando con ese ID.</p>
+{% endif %}
+{% endblock %}

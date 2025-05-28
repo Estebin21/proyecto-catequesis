@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h2>Eliminar Catequizando</h2>
+
+<!-- Siempre mostrar formulario para buscar por ID -->
+<form method="POST">
+    <input type="number" name="filtro_id" placeholder="Ingrese ID del catequizando" required>
+    <button type="submit">Buscar</button>
+</form>
+<hr>
+
+<!-- Mostrar detalles si hay catequizando -->
+{% if catequizando %}
+<p>¿Estás seguro que deseas eliminar al siguiente catequizando?</p>
+
+<ul>
+    <li><strong>ID:</strong> {{ catequizando[0] }}</li>
+    <li><strong>Nombre:</strong> {{ catequizando[1] }}</li>
+    <li><strong>Apellido:</strong> {{ catequizando[2] }}</li>
+    <li><strong>Cédula:</strong> {{ catequizando[3] }}</li>
+    <li><strong>Certificado Bautizo:</strong> {{ catequizando[4] }}</li>
+    <li><strong>Fecha de nacimiento:</strong> {{ catequizando[5] }}</li>
+    <li><strong>ID Nivel:</strong> {{ catequizando[6] }}</li>
+    <li><strong>ID Persona:</strong> {{ catequizando[7] }}</li>
+</ul>
+
+<form method="POST">
+    <input type="hidden" name="id" value="{{ catequizando[0] }}">
+    <input type="hidden" name="confirmar" value="1">
+    <button type="submit">Confirmar eliminación</button>
+    <a href="{{ url_for('buscar_catequizandos') }}">Cancelar</a>
+</form>
+{% elif request.method == 'POST' %}
+<p>No se encontró un catequizando con ese ID.</p>
+{% endif %}
+{% endblock %}
