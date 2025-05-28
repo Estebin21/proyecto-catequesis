@@ -1,18 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
     <title>Gestión Catequistas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-<nav>
-    <a href="{{ url_for('index') }}">Inicio</a> |
-    <a href="{{ url_for('listar_catequizandos') }}">Listar Catequizandos</a> |
-    <a href="{{ url_for('buscar_catequizandos') }}">Buscar Catequizandos</a> |
-    <a href="{{ url_for('crear_catequizando') }}">Registrar Catequizando</a> |
-    <a href="{{ url_for('editar_catequizando', id=1) }}">Editar Catequizando</a> |
-    <a href="{{ url_for('eliminar_catequizando', id=1) }}">Eliminar Catequizando</a>
-</nav>
-    <hr>
-    {% block content %}{% endblock %}
+    <!-- Encabezado -->
+    <div class="header">
+        <div class="header-left"></div>
+        <div class="title">Sistema de Catequesis</div>
+        <div class="header-right"></div>
+    </div>
+
+    <!-- Botones de navegación -->
+    <div class="nav-buttons">
+        <a href="{{ url_for('index') }}"><button>Inicio</button></a>
+        <a href="{{ url_for('listar_catequizandos') }}"><button>Listar Catequizandos</button></a>
+        <a href="{{ url_for('buscar_catequizandos') }}"><button>Buscar Catequizandos</button></a>
+        <a href="{{ url_for('crear_catequizando') }}"><button>Registrar Catequizando</button></a>
+        <a href="{{ url_for('editar_catequizando', id=1) }}"><button>Editar Catequizando</button></a>
+        <a href="{{ url_for('eliminar_catequizando', id=1) }}"><button>Eliminar Catequizando</button></a>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
 </body>
 </html>
