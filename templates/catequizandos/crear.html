@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h2>Registrar Catequizando</h2>
+<form method="POST">
+    <label>Nombre:</label><input type="text" name="nombre"><br>
+    <label>Apellido:</label><input type="text" name="apellido"><br>
+    <label>Cédula:</label><input type="text" name="cedula"><br>
+    <label>Certificado Bautizo:</label><input type="text" name="certificado"><br>
+    <label>Fecha Nacimiento:</label><input type="date" name="fecha_nacimiento"><br>
+    <label>ID Nivel:</label><input type="number" name="nivel_id"><br>
+    <label>ID Persona:</label><input type="number" name="persona_id"><br>
+    <button type="submit">Guardar</button>
+</form>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h2>Buscar Catequizando por Apellido</h2>
+<form method="POST">
+    <input type="text" name="filtro_apellido" placeholder="Ingrese apellido del catequizando" required>
+    <button type="submit">Buscar</button>
+</form>
+
+{% if catequizandos %}
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Cédula</th>
+        <th>Fecha Nacimiento</th>
+        <th>Certificado Bautizo</th>
+        <th>ID Nivel</th>
+        <th>ID Persona</th>
+    </tr>
+    {% for c in catequizandos %}
+    <tr>
+        <td>{{ c[0] }}</td>
+        <td>{{ c[1] }}</td>
+        <td>{{ c[2] }}</td>
+        <td>{{ c[3] }}</td>
+        <td>{{ c[4] }}</td>
+        <td>{{ c[5] }}</td>
+        <td>{{ c[6] }}</td>
+        <td>{{ c[7] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% elif request.method == 'POST' %}
+<p>No se encontró ningún catequizando con ese apellido.</p>
+{% endif %}
+{% endblock %}
