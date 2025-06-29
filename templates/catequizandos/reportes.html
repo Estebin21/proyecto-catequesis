@@ -1,0 +1,84 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h2>Reportes de Catequesis</h2>
+
+<!-- Reporte 1: Catequizandos por Parroquia -->
+<h3>Catequizandos por Parroquia</h3>
+<table>
+    <tr>
+        <th>Parroquia</th>
+        <th>Catequizandos</th>
+    </tr>
+    {% for item in catequizandos_por_parroquia %}
+    <tr>
+        <td>{{ item.parroquia }}</td>
+        <td>
+            <ul>
+                {% for c in item.catequizandos %}
+                <li>{{ c.nombre }} {{ c.apellido }}</li>
+                {% endfor %}
+            </ul>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- Reporte 2: Catequistas por Parroquia -->
+<h3>Catequistas por Parroquia</h3>
+<table>
+    <tr>
+        <th>Nombre</th>
+        <th>Parroquia</th>
+    </tr>
+    {% for item in catequistas_por_parroquia %}
+    <tr>
+        <td>{{ item.nombre }}</td>
+        <td>{{ item.parroquia }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- Reporte 3: Catequistas por Nivel -->
+<h3>Catequistas por Nivel</h3>
+<table>
+    <tr>
+        <th>Nivel</th>
+        <th>Catequistas</th>
+    </tr>
+    {% for item in catequistas_por_nivel %}
+    <tr>
+        <td>{{ item.nivel }}</td>
+        <td>
+            <ul>
+                {% for c in item.catequistas %}
+                <li>{{ c.nombre }} {{ c.apellido }}</li>
+                {% endfor %}
+            </ul>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- Reporte 4: Catequizandos por Nivel -->
+<h3>Catequizandos por Nivel</h3>
+<table>
+    <tr>
+        <th>Nivel</th>
+        <th>Catequizandos</th>
+    </tr>
+    {% for item in catequizandos_por_nivel %}
+    <tr>
+        <td>{{ item.nivel }}</td>
+        <td>
+            <ul>
+                {% for c in item.catequizandos %}
+                <li>{{ c.nombre }} {{ c.apellido }}</li>
+                {% endfor %}
+            </ul>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

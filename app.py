@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import pyodbc
 import ConectionDB
+from collections import defaultdict
 
 app = Flask(__name__)
 
@@ -111,9 +112,93 @@ def eliminar_catequizando():
 
     return render_template('catequizandos/eliminar.html', catequizando=None)
 
+# ---------- REPORTES REALIZADOS ----------
+@app.route('/catequizandos/reporte', methods=['GET'])
+def reporteCatequizando():
+    colecciones = ConectionDB.setUpDBConnection()
+    catequizandos = colecciones[0]
+    catequistas = colecciones[1]
+    certificados = colecciones[2]
+    niveles = colecciones[3]
+    parroquias = colecciones[4]
 
+    # Reporte 1: Catequizandos por parroquia
+    parroquia_dict = {p['_id']: p['nombre'] for p in parroquias.find()}
+    grupo = defaultdict(list)
 
+    for c in catequizandos.find():
+        parroquia_id = c.get("parroquia", {}).get("id")
+        if parroquia_id:
+            grupo[parroquia_id].append({
+                "nombre": c.get("nombre"),
+                "apellido": c.get("apellido")
+            })
 
+    catequizandos_por_parroquia = [
+        {
+            "parroquia": parroquia_dict.get(pid, "Sin nombre"),
+            "catequizandos": lista
+        }
+        for pid, lista in grupo.items()
+    ]
+
+    # Reporte 2: Catequistas por parroquia
+    parroquias_dict = {p['_id']: p['nombre'] for p in parroquias.find()}
+    catequistas_por_parroquia = []
+    for c in catequistas.find():
+        parroquia_id = c.get("parroquia_id")
+        catequistas_por_parroquia.append({
+            "nombre": f"{c['nombre']} {c['apellido']}",
+            "parroquia": parroquias_dict.get(parroquia_id, "No asignada")
+        })
+
+    # Reporte 3: Catequistas por nivel
+    niveles_dict = {n['_id']: n['nombre'] for n in niveles.find()}
+    catequistas_nivel = catequistas.aggregate([
+        {"$unwind": "$niveles"},
+        {"$group": {
+            "_id": "$niveles.nivel_id",
+            "catequistas": {
+                "$push": {
+                    "nombre": "$nombre",
+                    "apellido": "$apellido"
+                }
+            }
+        }}
+    ])
+    catequistas_por_nivel = [
+        {
+            "nivel": niveles_dict.get(c["_id"], "Sin nombre"),
+            "catequistas": c["catequistas"]
+        } for c in catequistas_nivel
+    ]
+
+    # Reporte 4: Catequizandos por nivel
+    catequizandos_nivel = catequizandos.aggregate([
+        {"$group": {
+            "_id": "$nivel_id",
+            "catequizandos": {
+                "$push": {
+                    "nombre": "$nombre",
+                    "apellido": "$apellido"
+                }
+            }
+        }}
+    ])
+    catequizandos_por_nivel = [
+        {
+            "nivel": niveles_dict.get(c["_id"], "Sin nombre"),
+            "catequizandos": c["catequizandos"]
+        } for c in catequizandos_nivel
+    ]
+
+    return render_template(
+        'catequizandos/reportes.html',
+        catequizandos_por_parroquia=catequizandos_por_parroquia,
+        catequistas_por_parroquia=catequistas_por_parroquia,
+        catequistas_por_nivel=catequistas_por_nivel,
+        catequizandos_por_nivel=catequizandos_por_nivel
+    )
 
 # ---------- INICIO ----------
 @app.route('/')
