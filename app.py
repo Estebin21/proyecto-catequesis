@@ -121,76 +121,41 @@ def reporteCatequizando():
     certificados = colecciones[2]
     niveles = colecciones[3]
     parroquias = colecciones[4]
+    db=colecciones[0].database
+    niveles_dict = {n['_id']: n['nombre'] for n in niveles.find()}
 
     # Reporte 1: Catequizandos por parroquia
     parroquia_dict = {p['_id']: p['nombre'] for p in parroquias.find()}
-    grupo = defaultdict(list)
-
-    for c in catequizandos.find():
-        parroquia_id = c.get("parroquia", {}).get("id")
-        if parroquia_id:
-            grupo[parroquia_id].append({
-                "nombre": c.get("nombre"),
-                "apellido": c.get("apellido")
-            })
-
-    catequizandos_por_parroquia = [
-        {
-            "parroquia": parroquia_dict.get(pid, "Sin nombre"),
-            "catequizandos": lista
-        }
-        for pid, lista in grupo.items()
-    ]
+    catequizandos_por_parroquia = []
+    for doc in db.vista_catequizandos_por_parroquia.find():
+        catequizandos_por_parroquia.append({
+            "parroquia": parroquia_dict.get(doc["_id"], "Sin nombre"),
+            "catequizandos": doc["catequizandos"]
+        })
 
     # Reporte 2: Catequistas por parroquia
-    parroquias_dict = {p['_id']: p['nombre'] for p in parroquias.find()}
     catequistas_por_parroquia = []
-    for c in catequistas.find():
-        parroquia_id = c.get("parroquia_id")
+    for doc in db.vista_catequistas_por_parroquia.find():
         catequistas_por_parroquia.append({
-            "nombre": f"{c['nombre']} {c['apellido']}",
-            "parroquia": parroquias_dict.get(parroquia_id, "No asignada")
+            "nombre": doc["nombre_completo"],
+            "parroquia": parroquia_dict.get(doc.get("parroquia_id"), "No asignada")
         })
 
     # Reporte 3: Catequistas por nivel
-    niveles_dict = {n['_id']: n['nombre'] for n in niveles.find()}
-    catequistas_nivel = catequistas.aggregate([
-        {"$unwind": "$niveles"},
-        {"$group": {
-            "_id": "$niveles.nivel_id",
-            "catequistas": {
-                "$push": {
-                    "nombre": "$nombre",
-                    "apellido": "$apellido"
-                }
-            }
-        }}
-    ])
-    catequistas_por_nivel = [
-        {
-            "nivel": niveles_dict.get(c["_id"], "Sin nombre"),
-            "catequistas": c["catequistas"]
-        } for c in catequistas_nivel
-    ]
+    catequistas_por_nivel = []
+    for doc in db.vista_catequistas_por_nivel.find():
+        catequistas_por_nivel.append({
+            "nivel": niveles_dict.get(doc["_id"], "Sin nombre"),
+            "catequistas": doc["catequistas"]
+        })
 
     # Reporte 4: Catequizandos por nivel
-    catequizandos_nivel = catequizandos.aggregate([
-        {"$group": {
-            "_id": "$nivel_id",
-            "catequizandos": {
-                "$push": {
-                    "nombre": "$nombre",
-                    "apellido": "$apellido"
-                }
-            }
-        }}
-    ])
-    catequizandos_por_nivel = [
-        {
-            "nivel": niveles_dict.get(c["_id"], "Sin nombre"),
-            "catequizandos": c["catequizandos"]
-        } for c in catequizandos_nivel
-    ]
+    catequizandos_por_nivel = []
+    for doc in db.vista_catequizandos_por_nivel.find():
+        catequizandos_por_nivel.append({
+            "nivel": niveles_dict.get(doc["_id"], "Sin nombre"),
+            "catequizandos": doc["catequizandos"]
+        })
 
     return render_template(
         'catequizandos/reportes.html',
@@ -199,6 +164,7 @@ def reporteCatequizando():
         catequistas_por_nivel=catequistas_por_nivel,
         catequizandos_por_nivel=catequizandos_por_nivel
     )
+
 
 # ---------- INICIO ----------
 @app.route('/')
